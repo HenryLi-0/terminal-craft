@@ -1,5 +1,5 @@
 from subsystems.mathutil import *
-import random, time, math
+import random, time, math, numpy
 import os, platform
 
 class DisplaySettings:
@@ -11,11 +11,14 @@ class DisplayData:
     @staticmethod
     def generateRandom():
         temp = DisplayData()
-        temp.data = [[[random.randint(0,255),random.randint(0,255),random.randint(0,255)] for i in range(DisplaySettings.WIDTH)] for ie in range(DisplaySettings.HEIGHT)]
+        for ie in range(DisplaySettings.HEIGHT):
+            for i in range(DisplaySettings.WIDTH):
+                temp.setPixel(i, ie, (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
+
         return temp
     
     def __init__(self):
-        self.data = [[[0,0,0] for i in range(DisplaySettings.WIDTH)] for ie in range(DisplaySettings.HEIGHT)]
+        self.data = numpy.zeros((DisplaySettings.HEIGHT, DisplaySettings.WIDTH, 3), numpy.uint8)
     def setPixel(self, x, y, color):
         self.data[y][x] = color
     def getPixel(self, x, y):
@@ -30,7 +33,7 @@ class Display:
         return "\033[38;2;{};{};{}".format(minmax(0, round(foreground[0]), 255), minmax(0, round(foreground[1]), 255), minmax(0, round(foreground[2]), 255))
 
     def __init__(self):
-        self.lastRenderTime = 0
+        self.tick = 0
 
     def render(self, data:DisplayData, debug = True):
         start = time.time()
@@ -43,8 +46,20 @@ class Display:
             for i in range(DisplaySettings.WIDTH):
                 out += Display.colorForeground(data.getPixel(i, ie*2)) + DisplaySettings.PIXEL
             out += "\n'"
-        out += "\033[0m" + "Debug: ( {} x {} ), t = {} ms".format(DisplaySettings.WIDTH, DisplaySettings.HEIGHT, roundf(self.lastRenderTime*1000, 2))
+        endRender = time.time()
         os.system("cls" if platform.system() == "Windows" else "clear")
+        endClear = time.time()
         print(out)
-        end = time.time()
-        self.lastRenderTime = end - start
+        endPrint = time.time()
+        print("\033[0m" + "Debug: ({}x{}), tick {} | t(all)={}ms, t(render)={}ms, t(clear)={}ms, t(print)={}ms"
+            .format(
+                DisplaySettings.WIDTH,
+                DisplaySettings.HEIGHT,
+                self.tick,
+                roundf((endPrint-start)*1000, 2),
+                roundf((endRender-start)*1000, 2),
+                roundf((endClear-endRender)*1000, 2),
+                roundf((endPrint-endClear)*1000, 2)
+            )
+        )
+        self.tick += 1
