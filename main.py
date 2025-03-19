@@ -1,7 +1,16 @@
+from subsystems.camera import *
 from subsystems.display import *
+from subsystems.inputs import *
+from subsystems.mathutil import *
+from subsystems.render import *
+from subsystems.world import *
 
-displayData = DisplayData.generateRandom()
+camera = Camera()
+world = WorldState(25)
+renderer = Renderer(camera, world)
 display = Display()
+
 while True:
     time.sleep(0.03)
-    display.render(displayData)
+    temp = renderer.render()
+    display.render(temp)

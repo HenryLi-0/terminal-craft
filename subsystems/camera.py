@@ -14,6 +14,16 @@ class Camera:
         self.nearPlane = 0.1
         self.farPlane = 100
     
+    def applyMovement(self, controllerX, controllerY):
+        self.x += numpy.cos(self.yaw) * controllerX
+        self.y += numpy.sin(self.yaw) * controllerY
+
+    def applyRotation(self, controllerX, controllerY):
+        self.yaw += controllerX
+        self.yaw = (self.yaw + numpy.pi) % (2 * numpy.pi) - numpy.pi
+        self.pitch += controllerY
+        self.pitch = numpy.clip(self.pitch, -numpy.pi/2, numpy.pi/2)
+
     def getPosition(self):
         return [self.x,self.y,self.z]
 
