@@ -19,15 +19,3 @@ class WorldState:
         self.world[x-self.offset][y-self.offset][z-self.offset] = block
     def getBlock(self, x, y, z):
         return self.world[x-self.offset][y-self.offset][z-self.offset]
-
-class CameraPosition:
-    def __init__(self, x = 0, y = 0, pitch = 0, yaw = 0):
-        self.x = x
-        self.y = y
-        self.pitch = pitch
-        self.yaw = yaw
-
-        # not in inital for now
-        self.fov = numpy.pi / 4
-        self.nearPlane = 0.1
-        self.farPlane = 100

@@ -5,6 +5,7 @@ import os, platform
 class DisplaySettings:
     WIDTH = 125
     HEIGHT = 30
+    ASPECT_RATIO = WIDTH/HEIGHT
     PIXEL = "▀"
 
 class DisplayData:
