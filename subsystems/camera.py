@@ -13,6 +13,9 @@ class Camera:
         self.fov = numpy.pi / 4
         self.nearPlane = 0.1
         self.farPlane = 100
+    
+    def getPosition(self):
+        return [self.x,self.y,self.z]
 
     def getRotation(self):
         cosPitch =  numpy.cos(self.pitch)

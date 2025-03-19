@@ -15,15 +15,23 @@ class DisplayData:
         for ie in range(DisplaySettings.HEIGHT):
             for i in range(DisplaySettings.WIDTH):
                 temp.setPixel(i, ie, (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
-
         return temp
     
     def __init__(self):
         self.data = numpy.zeros((DisplaySettings.HEIGHT, DisplaySettings.WIDTH, 3), numpy.uint8)
-    def setPixel(self, x, y, color):
-        self.data[y][x] = color
+        self.depthBuffer = numpy.full((DisplaySettings.WIDTH, DisplaySettings.HEIGHT, float("inf")))
+    def setPixel(self, x, y, color, distance):
+        if 0 <= round(y) <=  DisplaySettings.HEIGHT-1 and 0 <= round(x) <= DisplaySettings.WIDTH-1:
+            if self.depthBuffer[round(y)][round(x)] > distance:
+                self.data[round(y)][round(x)] = color
+                self.depthBuffer[round(y)][round(x)] = distance
+                return True
+        return False
     def getPixel(self, x, y):
         return self.data[y][x]
+    def reset(self):
+        self.data.fill(0)
+        self.depthBuffer.fill(float("inf"))
 
 class Display:
     @staticmethod
