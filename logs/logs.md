@@ -31,3 +31,5 @@ ok, fixed the weird crashing by changing the camera projection matrix to 4x4 ins
 ok, been working on some stuff, and rendering seems to be starting to work, inputs also are listening (using the `keyboard` module), player is moving and added some debug log thing! still need to write something for rendering lines (so we get, you know, cubes and stuff)
 
 ok, rendering stuff, we got a very vibrant green cube! it also seems that we dont really have any "is it behind me" detection, as i think we are seeing behind ourselves?
+
+ok, just speedran a gif, gonna submit a minimal viable product (sucks, but out of time :/)
