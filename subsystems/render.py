@@ -1,7 +1,7 @@
-from subsystems.voxel.camera import *
-from subsystems.voxel.world import *
-from subsystems.voxel.display import *
-from subsystems.voxel.debug import *
+from subsystems.camera import *
+from subsystems.world import *
+from subsystems.display import *
+from subsystems.debug import *
 
 CUBE_INSTRUCTIONS = [
     # x

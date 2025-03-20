@@ -1,36 +1,19 @@
-from subsystems.voxel.camera import *
-from subsystems.voxel.debug import *
-from subsystems.voxel.display import *
-from subsystems.voxel.inputs import *
-from subsystems.voxel.mathutil import *
-from subsystems.voxel.render import *
-from subsystems.voxel.world import *
-import time
+from subsystems.debug import *
+from subsystems.display import *
+from subsystems.media import *
+import time, os
 
 debug = Debug()
-camera = Camera(debug, 7,7,10)
-world = WorldState(25)
-renderer = Renderer(debug, camera, world)
+displayData = MediaDisplayData(debug)
 display = Display(debug)
+media = Media(os.path.join("subsystems", "1155-crescendo.gif"))
 
-lastUpdate = 0
+
+i = 0
 while True:
-    if abs(time.time() - lastUpdate) > 0.03:
-        lastUpdate = time.time()
-        temp = renderer.render()
-        display.render(temp)
-        debug.detail()
-
-    # position controls
-    if keyPressed("w"):     camera.applyMovement( 0,-1, 0)
-    if keyPressed("a"):     camera.applyMovement(-1, 0, 0)
-    if keyPressed("s"):     camera.applyMovement( 0, 1, 0)
-    if keyPressed("d"):     camera.applyMovement( 1, 0, 0)
-    if keyPressed("shift"): camera.applyMovement( 0, 0,-1)
-    if keyPressed("space"): camera.applyMovement( 0, 0, 1)
-
-    # rotation controls
-    if keyPressed("Up"):    camera.applyRotation(   0, 0.1)
-    if keyPressed("Down"):  camera.applyRotation(   0,-0.1)
-    if keyPressed("Left"):  camera.applyRotation(-0.1,   0)
-    if keyPressed("Right"): camera.applyRotation( 0.1,   0)
+    # if abs(time.time() - lastUpdate) > 0.03:
+    #     lastUpdate = time.time()
+    #     debug.detail()
+    displayData.setData(media.get(i % media.gifLength))
+    display.render(displayData)
+    i += 1

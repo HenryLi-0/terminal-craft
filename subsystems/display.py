@@ -1,13 +1,31 @@
-from subsystems.voxel.mathutil import *
-from subsystems.voxel.debug import *
+from subsystems.mathutil import *
+from subsystems.debug import *
 import random, time, math, numpy
 import os, platform
 
 class DisplaySettings:
-    WIDTH = 125*2
-    HEIGHT = 30*2
+    WIDTH = 120
+    HEIGHT = 60
     ASPECT_RATIO = WIDTH/HEIGHT
     PIXEL = "▀"
+
+class MediaDisplayData:
+    def __init__(self, debug:Debug):
+        self.debug = debug
+        self.data = numpy.zeros((DisplaySettings.HEIGHT, DisplaySettings.WIDTH, 3), numpy.uint8)
+    def setPixel(self, x, y, color, distance):
+        tempX = round(x)
+        tempY = round(y)
+        if 0 <= tempX < DisplaySettings.WIDTH and 0 <= tempY < DisplaySettings.HEIGHT:
+            self.data[tempY][tempX] = color
+            return True
+        return False
+    def getPixel(self, x, y):
+        return self.data[y][x]
+    def setData(self, data):
+        self.data = data
+    def reset(self):
+        self.data.fill(0)
 
 class DisplayData:
     @staticmethod
@@ -70,17 +88,17 @@ class Display:
         self.tick = 0
         self.debug = debug
 
-    def render(self, data:DisplayData):
+    def render(self, data:DisplayData|MediaDisplayData):
         start = time.time()
         out = ""
         for ie in range(math.floor(DisplaySettings.HEIGHT/2)):
             for i in range(DisplaySettings.WIDTH):
                 out += Display.color(data.getPixel(i, ie*2), data.getPixel(i, ie*2+1)) + DisplaySettings.PIXEL
-            out += "\n"
+            out += "\033[0m\n"
         if DisplaySettings.HEIGHT % 2 == 1:
             for i in range(DisplaySettings.WIDTH):
                 out += Display.colorForeground(data.getPixel(i, ie*2)) + DisplaySettings.PIXEL
-            out += "\n'"
+            out += "\033[0m\n'"
         endRender = time.time()
         os.system("cls" if platform.system() == "Windows" else "clear")
         endClear = time.time()

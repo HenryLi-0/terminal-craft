@@ -1,10 +1,10 @@
-from subsystems.voxel.camera import *
-from subsystems.voxel.debug import *
-from subsystems.voxel.display import *
-from subsystems.voxel.inputs import *
-from subsystems.voxel.mathutil import *
-from subsystems.voxel.render import *
-from subsystems.voxel.world import *
+from subsystems.camera import *
+from subsystems.debug import *
+from subsystems.display import *
+from subsystems.inputs import *
+from subsystems.mathutil import *
+from subsystems.render import *
+from subsystems.world import *
 import time
 
 debug = Debug()

@@ -1,6 +1,6 @@
 import numpy
-from subsystems.voxel.display import DisplaySettings
-from subsystems.voxel.debug import *
+from subsystems.display import DisplaySettings
+from subsystems.debug import *
 
 class Camera:
     def __init__(self, debug, x = 0, y = 0, z = 0, pitch = 0, yaw = 0):
