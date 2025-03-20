@@ -4,5 +4,7 @@ class Debug:
     def post(self, data):
         self.log.append(data)
     def detail(self):
-        print(self.log)
+        print("\033[0m" + "Debug:")
+        for item in self.log:
+            print(item)
         self.log.clear()

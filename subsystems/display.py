@@ -1,4 +1,5 @@
 from subsystems.mathutil import *
+from subsystems.debug import *
 import random, time, math, numpy
 import os, platform
 
@@ -43,10 +44,11 @@ class Display:
     def colorForeground(foreground):
         return "\033[38;2;{};{};{}".format(minmax(0, round(foreground[0]), 255), minmax(0, round(foreground[1]), 255), minmax(0, round(foreground[2]), 255))
 
-    def __init__(self):
+    def __init__(self, debug:Debug):
         self.tick = 0
+        self.debug = debug
 
-    def render(self, data:DisplayData, debug = True):
+    def render(self, data:DisplayData):
         start = time.time()
         out = ""
         for ie in range(math.floor(DisplaySettings.HEIGHT/2)):
@@ -62,7 +64,7 @@ class Display:
         endClear = time.time()
         print(out)
         endPrint = time.time()
-        print("\033[0m" + "Debug: ({}x{}), tick {} | t(all)={}ms, t(render)={}ms, t(clear)={}ms, t(print)={}ms"
+        self.debug.post(" | Display: ({}x{}), tick {} | t(all)={}ms, t(render)={}ms, t(clear)={}ms, t(print)={}ms"
             .format(
                 DisplaySettings.WIDTH,
                 DisplaySettings.HEIGHT,

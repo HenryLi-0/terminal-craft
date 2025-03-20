@@ -1,9 +1,11 @@
 from subsystems.camera import *
 from subsystems.world import *
 from subsystems.display import *
+from subsystems.debug import *
 
 class Renderer:
-    def __init__(self, camera:Camera, world:WorldState):
+    def __init__(self, debug: Debug, camera:Camera, world:WorldState):
+        self.debug = debug
         self.camera = camera
         self.world = world
         self.displayData = DisplayData() 
@@ -26,7 +28,8 @@ class Renderer:
 
                     distance = numpy.linalg.norm(translation)
 
-                    self.displayData.setPixel(projection[0], projection[1], Block.COLOR_MAP[self.world.getBlock(x,y,z)], distance)
+                    self.displayData.setPixel(projection[0]+DisplaySettings.WIDTH/2, projection[1]+DisplaySettings.HEIGHT/2, Block.COLOR_MAP[self.world.getBlock(x,y,z)], distance)
                     i += 1
         self.lastBlocksProccessed = i
+        self.debug.post(" | Renderer: {} blocks processed".format(i))
         return self.displayData

@@ -1,8 +1,10 @@
 import numpy
-from  subsystems.display import DisplaySettings
+from subsystems.display import DisplaySettings
+from subsystems.debug import *
 
 class Camera:
-    def __init__(self, x = 0, y = 0, z = 0, pitch = 0, yaw = 0):
+    def __init__(self, debug, x = 0, y = 0, z = 0, pitch = 0, yaw = 0):
+        self.debug = debug
         self.x = x
         self.y = y
         self.z = z
@@ -15,8 +17,8 @@ class Camera:
         self.farPlane = 100
     
     def applyMovement(self, controllerX, controllerY, controllerZ):
-        self.x += numpy.cos(self.yaw) * controllerX - numpy.sin(self.yaw) * controllerY
-        self.y += numpy.sin(self.yaw) * controllerY + numpy.cos(self.yaw) * controllerX
+        self.x += controllerX #numpy.cos(self.yaw) * controllerX
+        self.y += controllerY #numpy.sin(self.yaw) * controllerY
         self.z += controllerZ
 
     def applyRotation(self, controllerX, controllerY):
@@ -54,6 +56,8 @@ class Camera:
     def update(self):
         self.latestRotation = self.getRotation()
         self.latestProjection = self.getProjection()
+        
+        self.debug.post(" | Camera: pos {}, rot {}".format([self.x, self.y, self.z], [self.yaw, self.pitch]))
 
     def project(self, point):
         homogeneous = numpy.append(point, 1)

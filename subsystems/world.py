@@ -21,7 +21,13 @@ class WorldState:
 
         # TEST, TO-DO: REMOVE!
         self.setBlock(5,5,5,Block.GRASS)
-        self.setBlock(6,5,5,Block.DIRT)
+        self.setBlock(5,7,5,Block.STONE)
+        self.setBlock(7,5,5,Block.GRASS)
+        self.setBlock(7,7,5,Block.STONE)
+        self.setBlock(5,5,7,Block.GRASS)
+        self.setBlock(5,7,7,Block.STONE)
+        self.setBlock(7,5,7,Block.GRASS)
+        self.setBlock(7,7,7,Block.DIRT)
     def setBlock(self, x, y, z, block):
         self.world[x-self.offset][y-self.offset][z-self.offset] = block
     def getBlock(self, x, y, z):
