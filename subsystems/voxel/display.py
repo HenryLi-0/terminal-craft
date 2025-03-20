@@ -1,11 +1,11 @@
-from subsystems.mathutil import *
-from subsystems.debug import *
+from subsystems.voxel.mathutil import *
+from subsystems.voxel.debug import *
 import random, time, math, numpy
 import os, platform
 
 class DisplaySettings:
-    WIDTH = 125
-    HEIGHT = 30
+    WIDTH = 125*2
+    HEIGHT = 30*2
     ASPECT_RATIO = WIDTH/HEIGHT
     PIXEL = "▀"
 
@@ -18,7 +18,8 @@ class DisplayData:
                 temp.setPixel(i, ie, (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
         return temp
     
-    def __init__(self):
+    def __init__(self, debug:Debug):
+        self.debug = debug
         self.data = numpy.zeros((DisplaySettings.HEIGHT, DisplaySettings.WIDTH, 3), numpy.uint8)
         self.depthBuffer = numpy.full((DisplaySettings.HEIGHT, DisplaySettings.WIDTH), float("inf"))
     def setPixel(self, x, y, color, distance):
@@ -30,6 +31,27 @@ class DisplayData:
                 self.depthBuffer[tempY][tempX] = distance
                 return True
         return False
+    def drawLine(self, x1, y1, x2, y2, color, distance):
+        # uses bresenham's line algorithm
+        dx = abs(x2 - x1)
+        dy = abs(y2 - y1)
+        sx = 1 if x1 < x2 else -1
+        sy = 1 if y1 < y2 else -1
+        err = dx - dy
+
+        attempts = 0
+        while attempts < 1000:
+            self.setPixel(x1, y1, color, distance)
+            if abs(x1-x2) < 1.5 and abs(y1-y2) < 1.5: break
+            e2 = err * 2
+            if e2 > -dy:
+                err -= dy
+                x1 += sx
+            if e2 < dx:
+                err += dx
+                y1 += sy
+            attempts += 1
+        # self.debug.post(" | DisplayData: drawLine attempts: {}".format(attempts))
     def getPixel(self, x, y):
         return self.data[y][x]
     def reset(self):
