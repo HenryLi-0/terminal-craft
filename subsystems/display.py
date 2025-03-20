@@ -19,12 +19,14 @@ class DisplayData:
     
     def __init__(self):
         self.data = numpy.zeros((DisplaySettings.HEIGHT, DisplaySettings.WIDTH, 3), numpy.uint8)
-        self.depthBuffer = numpy.full((DisplaySettings.WIDTH, DisplaySettings.HEIGHT), float("inf"))
+        self.depthBuffer = numpy.full((DisplaySettings.HEIGHT, DisplaySettings.WIDTH), float("inf"))
     def setPixel(self, x, y, color, distance):
-        if 0 <= round(y) <=  DisplaySettings.HEIGHT-1 and 0 <= round(x) <= DisplaySettings.WIDTH-1:
-            if self.depthBuffer[round(y)][round(x)] > distance:
-                self.data[round(y)][round(x)] = color
-                self.depthBuffer[round(y)][round(x)] = distance
+        tempX = round(x)
+        tempY = round(y)
+        if 0 <= tempX < DisplaySettings.WIDTH and 0 <= tempY < DisplaySettings.HEIGHT:
+            if self.depthBuffer[tempY][tempX] > distance:
+                self.data[tempY][tempX] = color
+                self.depthBuffer[tempY][tempX] = distance
                 return True
         return False
     def getPixel(self, x, y):

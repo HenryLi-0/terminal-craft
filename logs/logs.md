@@ -17,3 +17,13 @@ and now here's a bigger display!
 ![waw](</logs/images/03172025 - 2.png>)
 
 having a couple strange issues with lag or what not, so gonna try to fix that! it appears that clearing the screen is taking a bit, so thats interesting... anyways, good night! (wait hows it 2am already)
+
+# 3/18/2025
+
+was too tired lol, anyways, wrote lots of bits about the player camera, and theoretically the renderer, and world and stuff
+
+# 3/19/2025
+
+ok, last day to work on it, ready to work on it for the next three hours...
+
+ok, fixed the weird crashing by changing the camera projection matrix to 4x4 instead of 3x3, now its just a black screen...

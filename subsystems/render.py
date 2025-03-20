@@ -7,6 +7,7 @@ class Renderer:
         self.camera = camera
         self.world = world
         self.displayData = DisplayData() 
+        self.lastBlocksProccessed = 0
     def render(self):
         # clear
         self.camera.update()
@@ -14,6 +15,7 @@ class Renderer:
         # calculations
         rotationMatrix = self.camera.latestRotation
         projectionMatrix = self.camera.latestProjection
+        i = 0
         for x in range(self.world.offset*2):
             for y in range(self.world.offset*2):
                 for z in range(self.world.offset*2):
@@ -24,5 +26,7 @@ class Renderer:
 
                     distance = numpy.linalg.norm(translation)
 
-                    self.displayData.setPixel(projection[0], projection[1], [255,255,255], distance)
+                    self.displayData.setPixel(projection[0], projection[1], Block.COLOR_MAP[self.world.getBlock(x,y,z)], distance)
+                    i += 1
+        self.lastBlocksProccessed = i
         return self.displayData

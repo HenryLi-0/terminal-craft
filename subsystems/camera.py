@@ -14,9 +14,10 @@ class Camera:
         self.nearPlane = 0.1
         self.farPlane = 100
     
-    def applyMovement(self, controllerX, controllerY):
-        self.x += numpy.cos(self.yaw) * controllerX
-        self.y += numpy.sin(self.yaw) * controllerY
+    def applyMovement(self, controllerX, controllerY, controllerZ):
+        self.x += numpy.cos(self.yaw) * controllerX - numpy.sin(self.yaw) * controllerY
+        self.y += numpy.sin(self.yaw) * controllerY + numpy.cos(self.yaw) * controllerX
+        self.z += controllerZ
 
     def applyRotation(self, controllerX, controllerY):
         self.yaw += controllerX
@@ -34,9 +35,10 @@ class Camera:
         sinYaw =  numpy.sin(self.yaw)
 
         return numpy.array([
-            [ cosYaw, -sinYaw*cosPitch,  sinYaw*sinPitch],
-            [ sinYaw,  cosYaw*cosPitch, -cosYaw*sinPitch],
-            [      0,         sinPitch,         cosPitch]
+            [ cosYaw, -sinYaw*cosPitch,  sinYaw*sinPitch, 0],
+            [ sinYaw,  cosYaw*cosPitch, -cosYaw*sinPitch, 0],
+            [      0,         sinPitch,         cosPitch, 0],
+            [      0,                0,                0, 1]
         ])
 
 
@@ -54,8 +56,8 @@ class Camera:
         self.latestProjection = self.getProjection()
 
     def project(self, point):
-        source = numpy.append(point, 1)
-        screenSpacePoint = numpy.dot(self.latestProjection, numpy.dot(self.latestRotation, source))
+        homogeneous = numpy.append(point, 1)
+        screenSpacePoint = numpy.dot(self.latestProjection, numpy.dot(self.latestRotation, homogeneous))
         if screenSpacePoint[3] != 0:
             screenSpacePoint /= screenSpacePoint[3]
         return screenSpacePoint[:2]
